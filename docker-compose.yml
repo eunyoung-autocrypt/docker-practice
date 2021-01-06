@@ -1,0 +1,29 @@
+version: "3.1"
+services:
+  ca-db:
+    #image: mariadb:10.4
+    build:
+      context: ./docker
+      dockerfile: Dockerfile.db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: flatron123!
+      MYSQL_DATABASE: webca
+    volumes:
+      - ./ca-db-data:/var/lib/mysql
+#      - ./docker/mysql-conf/init.sql/:/docker-entrypoint-initdb.d/
+    ports:
+      - 3333:3306
+
+  ca-was:
+    build:
+      context: .
+      dockerfile : ./docker/Dockerfile.tomcat
+    environment:
+      - "JAVA_OPTS=-Dspring.profiles.active=prod"
+    ports:
+      - 8080:8080
+      - 5000:5000
+    depends_on:
+      - ca-db
+    restart: always
