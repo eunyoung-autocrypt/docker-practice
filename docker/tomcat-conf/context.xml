@@ -30,7 +30,7 @@
       auth="Container" type="javax.sql.DataSource" maxTotal="1000" maxIdle="30" maxWaitMillis="10000"
       validationQuery="select 1" testOnBorrow="true"
       username="root" password="flatron123!"
-      driverClassName="org.mariadb.jdbc.Driver" url="jdbc:mariadb://db:3333/webva?autoReconnect=true"/>
+      driverClassName="org.mariadb.jdbc.Driver" url="jdbc:mariadb://ca-db:3306/webva?autoReconnect=true"/>
 
 
 	<Resource name="jdbc/webca"

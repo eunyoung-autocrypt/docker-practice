@@ -8,22 +8,34 @@ services:
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: flatron123!
-      MYSQL_DATABASE: webca
+#      MYSQL_DATABASE: webca
     volumes:
       - ./ca-db-data:/var/lib/mysql
-#      - ./docker/mysql-conf/init.sql/:/docker-entrypoint-initdb.d/
+#      - ./docker/mysql-conf/init-sql/:/docker-entrypoint-initdb.d/
+      - ./docker/mysql-conf/init-sql:/tmp/database
+    command: mysqld --init-file="/tmp/database/init.sql"
     ports:
       - 3333:3306
 
   ca-was:
-    build:
-      context: .
-      dockerfile : ./docker/Dockerfile.tomcat
-    environment:
-      - "JAVA_OPTS=-Dspring.profiles.active=prod"
+    image: autocyrpt-ca
+#    build:
+#      context: .
+#      dockerfile : docker/Dockerfile.wca_tomcat
     ports:
       - 8080:8080
       - 5000:5000
+    depends_on:
+      - ca-db
+    restart: always
+
+  va-was:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.wva_tomcat
+    ports:
+      - 8081:8081
+      - 5001:5001
     depends_on:
       - ca-db
     restart: always
